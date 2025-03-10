@@ -42,7 +42,6 @@ local Player = {
 
 	sprite = {
 		idle = Fovy:newSprite("assets/img/characters/default/default_idle.png", 9, 11, "1-5", 1, 0.5),
-	love.graphics.backgroundColor = Fovy:rgb(0.4, 0.1, 0.4)
 		walk = Fovy:newSprite("assets/img/characters/default/default_walk.png", 9, 11, "1-2", 1, 0.17),
 	},
 
