@@ -3,9 +3,8 @@ local Fovy = require "fovy"
 local Object = require "object"
 
 local Camera = {
-	x = 0,
-	y = 0,
-	zoom = 2,
+	pos = Fovy:vec2(0, 0),
+	zoom = 3,
 	target = nil,
 	shakeValue = 0.00,
 }
@@ -25,7 +24,7 @@ end
 function Camera:set()
 	love.graphics.push()
 	love.graphics.scale(self.zoom)
-	love.graphics.translate(-(self.x), -(self.y))
+	love.graphics.translate(-(self.pos.x), -(self.pos.y))
 end
 
 function Camera:unset()
@@ -40,19 +39,26 @@ function Camera:update()
 	if self.target then
 		local w, h = love.graphics.getWidth() / self.zoom, love.graphics.getHeight() / self.zoom
 
-		self.x = (self.target.x - w / 2) + math.random(-self.shakeValue, self.shakeValue)
-		self.y = (self.target.y - h / 2) + math.random(-self.shakeValue, self.shakeValue)
+		self.pos.x = (self.target.pos.x - w / 2) + math.random(-self.shakeValue, self.shakeValue)
+		self.pos.y = (self.target.pos.y - h / 2) + math.random(-self.shakeValue, self.shakeValue)
 	end
 end
 
 function Camera:setPosition(x, y)
-	self.x = x
-	self.y = y
+	self.pos.x = x
+	self.pos.y = y
 end
 
 function Camera:shake(shakeValue)
 	self.shakeValue = shakeValue
 end
+
+function Camera:draw()
+end
+
+function Camera:drawGUI()
+end
+
 
 return Camera
 

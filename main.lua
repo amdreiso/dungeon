@@ -1,21 +1,21 @@
 
 local Fovy = require "fovy"
 local Object = require "object"
+local Global = require "global"
+local Level = require "level"
+local Window = require "window"
 local Player = require "obj.player"
 local Camera = require "obj.camera"
 local Particle = require "obj.particle"
-local Global = require "global"
+
 
 
 local player = Player:new() 
 local camera = Camera:new()
 camera:setTarget(player)
 
-local dummy = Object:new()
-dummy:implement {
-	x = 90,
-	y = 190,
-}
+Fovy:instanceAdd(player)
+Fovy:instanceAdd(camera)
 
 
 function love.conf(t)
@@ -23,11 +23,13 @@ function love.conf(t)
 end
 
 function love.load()
+	Window:setup()
+	Level:create()
 end
 
 function love.update(dt)
-	player:update()
-	camera:update()
+	love.math.setRandomSeed(os.time())
+	Level:update(dt)
 
 	for _, instance in ipairs(Global.Instances) do
 		instance:update(dt)
@@ -38,15 +40,33 @@ function love.update(dt)
 end
 
 function love.draw()
+	love.graphics.clear(0.4, 0.1, 0.4)
+
 	camera:set()
 
-	player:draw()
-	love.graphics.rectangle("fill", dummy.x, dummy.y, 10, 10)
-
 	for _, instance in ipairs(Global.Instances) do
-		instance:draw()
+	  instance:draw()
 	end
 
+	Level:draw()
+
 	camera:unset()
+
+	for _, instance in ipairs(Global.Instances) do
+	 	instance:drawGUI()
+	end
+
+	Fovy:drawDebug()
 end
+
+function love.keypressed(key)
+	if key == "escape" then
+		love.event.quit()
+	end
+
+	if key == "r" then
+		love.event.quit("restart")
+	end
+end
+
 

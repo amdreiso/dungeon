@@ -18,7 +18,6 @@ local Particle = {
 function Particle:new()
 	local particle = {}
 	self.destroy = function(self)
-		print("Particle destroyed")
 		self.isDestroyed = true
 	end
 
@@ -45,6 +44,9 @@ function Particle:draw()
 
 	love.graphics.setColor(self.color.r, self.color.g, self.color.b, self.alpha)
 	love.graphics.circle("fill", self.x, self.y, self.scale)
+end
+
+function Particle:drawGUI()
 end
 
 return Particle
