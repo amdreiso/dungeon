@@ -39,8 +39,8 @@ function Camera:update()
 	if self.target then
 		local w, h = love.graphics.getWidth() / self.zoom, love.graphics.getHeight() / self.zoom
 
-		self.pos.x = (self.target.pos.x - w / 2) + math.random(-self.shakeValue, self.shakeValue)
-		self.pos.y = (self.target.pos.y - h / 2) + math.random(-self.shakeValue, self.shakeValue)
+		self.pos.x = Fovy:lerp(self.pos.x, (self.target.pos.x - w / 2) + math.random(-self.shakeValue, self.shakeValue), 0.1)
+		self.pos.y = Fovy:lerp(self.pos.y, (self.target.pos.y - h / 2) + math.random(-self.shakeValue, self.shakeValue), 0.1)
 	end
 end
 
@@ -59,6 +59,13 @@ end
 function Camera:drawGUI()
 end
 
+function love.wheelmoved(x, y)
+	if y > 0 then
+		Camera.zoom = Camera.zoom + 0.1
+	elseif y < 0 then
+		Camera.zoom = Camera.zoom - 0.1
+	end
+end
 
 return Camera
 

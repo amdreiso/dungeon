@@ -1,8 +1,18 @@
 
 local Global = require "global"
-local Anim8 = require "lib.anim8"
+local Anim8 = require "libs.anim8"
 
 local Fovy = {}
+
+function Fovy:clamp(val, min, max)
+	if val < min then
+		return min
+	elseif val > max then
+		return max
+	else
+		return val
+	end
+end	
 
 function Fovy:sign(val)
 	if val > 0 then

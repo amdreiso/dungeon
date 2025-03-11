@@ -9,7 +9,6 @@ local Camera = require "obj.camera"
 local Particle = require "obj.particle"
 
 
-
 local player = Player:new() 
 local camera = Camera:new()
 camera:setTarget(player)
@@ -40,7 +39,7 @@ function love.update(dt)
 end
 
 function love.draw()
-	love.graphics.clear(0.4, 0.1, 0.4)
+	love.graphics.clear(0.5, 0.35, 0.0)
 
 	camera:set()
 

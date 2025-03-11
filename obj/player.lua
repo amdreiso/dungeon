@@ -4,7 +4,7 @@ local Object = require "object"
 local Global = require "global"
 local Level = require "level"
 local Particle = require "obj.particle"
-local Anim8 = require "lib.anim8"
+local Anim8 = require "libs.anim8"
 
 love.graphics.setDefaultFilter("nearest", "nearest")
 
@@ -41,8 +41,8 @@ local Player = {
 	color = Fovy:rgb(1.00, 1.00, 1.00),
 
 	sprite = {
-		idle = Fovy:newSprite("assets/img/characters/default/default_idle.png", 9, 11, "1-5", 1, 0.5),
-		walk = Fovy:newSprite("assets/img/characters/default/default_walk.png", 9, 11, "1-2", 1, 0.17),
+		idle = Fovy:newSprite("assets/img/characters/default/default_idle.png", 16, 16, "1-5", 1, 0.5),
+		walk = Fovy:newSprite("assets/img/characters/default/default_walk.png", 16, 16, "1-2", 1, 0.17),
 	},
 
 	spriteIndex = nil,
@@ -66,16 +66,19 @@ function Player:new()
 	return player
 end
 
+-- Sets the player's character
 function Player:setCharacter(characterID)
 	self.characterID = characterID
 end
 
+-- Sets the player's pizza status
 function Player:setPizza(val)
 	self.hasPizza = val
 	self.pizzaTimer = 100
 	self.pizzaIsCold = false
 end
 
+-- Everything pizza related
 function Player:pizzaLogic()
 	if not self.hasPizza then return false end
 
@@ -89,6 +92,7 @@ function Player:pizzaLogic()
 	end
 end
 
+-- Walking movement
 function Player:walkMovement()
 	self.hsp = 0
 	self.vsp = 0
@@ -120,6 +124,7 @@ function Player:walkMovement()
 	self.pos.y = self.pos.y + self.vsp
 end
 
+-- Car movement
 function Player:carMovement()
 	local isMoving = (self.speedTo ~= 0)
 	local car = self.car
@@ -148,12 +153,16 @@ function Player:carMovement()
 	self.pos.y = self.pos.y + self.force.y + car.speed * math.sin(car.direction)
 end
 
+-- Actual movement
 function Player:movement()
 	if self.onCar then
 		self:carMovement()
 	else
 		self:walkMovement()
 	end
+
+	self.pos.x = Fovy:clamp(self.pos.x, self.hitbox.width/2, Level.size.width - self.hitbox.width/2)
+	self.pos.y = Fovy:clamp(self.pos.y, self.hitbox.height/2, Level.size.height - self.hitbox.height/2)
 
 	if love.keyboard.isDown("space") then
 		for i = 1, 10 do
@@ -171,6 +180,7 @@ function Player:movement()
 	end
 end
 
+-- Receives pizza from the receive point
 function Player:getPizza()
 	if not Level.receivePoint.hasPizza then
 		return false
@@ -183,6 +193,7 @@ function Player:getPizza()
 	end
 end
 
+-- Delivers pizza to the deliver point
 function Player:deliverPizza()
 	if not self.hasPizza then
 		return false
@@ -190,6 +201,7 @@ function Player:deliverPizza()
 
 	if Fovy:colliding(self, Level.deliverPoint) then
 		print("DELIVERED PIZZA")
+
 		self:setPizza(false)
 		Level.receivePoint.hasPizza = true
 	end
@@ -253,4 +265,3 @@ function Player:drawGUI()
 end
 
 return Player
-
