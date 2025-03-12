@@ -31,10 +31,10 @@ function Level:setPoints()
 		self.deliverPoint.pos.x, 
 		self.deliverPoint.pos.y)) 
 
-	print("Distance: " .. dis, "Minimum Distance" .. minDistance)
+	--print("Distance: " .. dis, "Minimum Distance" .. minDistance)
 
 	if dis < minDistance then
-		print("REJECTED")
+		--print("REJECTED")
 		self:setPoints()
 	end
 end

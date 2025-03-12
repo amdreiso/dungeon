@@ -37,9 +37,19 @@ end
 function Enemy:update(dt)
 	self.pos.x = self.pos.x + self.hsp
 	self.pos.y = self.pos.y + self.vsp
+
+	print(self.pos.x, self.pos.y)
 end
 
 function Enemy:draw()
+	love.graphics.setColor(1, 0, 0)
+	love.graphics.rectangle(
+		"fill", 
+		self.pos.x - self.hitbox.width / 2, 
+		self.pos.y - self.hitbox.height / 2, 
+		self.hitbox.width, 
+		self.hitbox.height
+	)
 end
 
 function Enemy:drawGUI()

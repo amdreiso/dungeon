@@ -13,15 +13,17 @@ local Enemy = require "obj.enemy"
 
 
 local player = Player:new() 
+player.pos = Fovy:vec2(Level.size.width / 2, Level.size.height / 2)
 local camera = Camera:new()
+camera.pos = Fovy:vec2(Level.size.width / 2, Level.size.height / 2)
 local enemy = Enemy:new(0)
+enemy.pos = Fovy:vec2(100, 100)
 camera:setTarget(player)
+
 
 Fovy:instanceAdd(player)
 Fovy:instanceAdd(camera)
-Fovy:instanceAdd(enemy, {pos = Fovy:vec2(100, 100),})
-
-Fovy:printTable(Global.Instances, 2)
+Fovy:instanceAdd(enemy)
 
 function love.conf(t)
 	t.console = true
@@ -52,7 +54,7 @@ function love.draw()
 	for _, instance in ipairs(Global.Instances) do
 	  instance:draw()
 
-		if instance.hitbox ~= nil then
+		if instance.hitbox ~= nil and Global.Debug then
 			love.graphics.setColor(0.5, 0.5, 1.0)
 			love.graphics.rectangle(
 				"line", 
@@ -89,6 +91,12 @@ function love.keypressed(key)
 		local filename = os.date("screenshot_%Y-%m-%d_%H-%M-%S.png")
 		love.graphics.captureScreenshot(filename)
 	end
+
+	if key == "f3" then
+		Global.Debug = not Global.Debug
+	end
 end
+
+
 
 

@@ -35,10 +35,6 @@ end
 function Fovy:instanceAdd(obj, ...)
 	local o = obj
 
-	for key, val in ipairs({...}) do
-		o[key] = val
-	end
-
 	table.insert(Global.Instances, o)
 end
 
@@ -71,13 +67,13 @@ end
 
 function Fovy:printTable(t, indent)
 	indent = indent or 0
-	
+
 	for k, v in pairs(t) do
 		local prefix = string.rep("  ", indent)
 
 		if type(v) == "table" then
 			print(prefix .. k .. ": {")
-			Fovy.printTable(v, indent + 1)
+			Fovy:printTable(v, indent + 1)
 			print(prefix .. "}")
 		else
 			print(prefix .. k .. ": " .. tostring(v))
