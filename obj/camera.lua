@@ -4,7 +4,7 @@ local Object = require "object"
 
 local Camera = {
 	pos = Fovy:vec2(0, 0),
-	zoom = 3,
+	zoom = 6,
 	target = nil,
 	shakeValue = 0.00,
 }

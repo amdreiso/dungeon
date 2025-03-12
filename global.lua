@@ -1,7 +1,8 @@
 
 local Global = {
-	Instances = {},
 	Debug = true,
+	Instances = {},
+	EnemyList = {},
 }
 
 return Global

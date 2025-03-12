@@ -28,12 +28,18 @@ function Fovy:drawDebug()
 	if not Global.Debug then return end
 
 	love.graphics.setColor(1, 1, 1)
-	love.graphics.print("KITZA", 0, 0)
+	love.graphics.print("kizza", 0, 0)
 	love.graphics.print("made by amdrei", 0, 12)
 end
 
-function Fovy:instanceAdd(obj)
-	table.insert(Global.Instances, obj)
+function Fovy:instanceAdd(obj, ...)
+	local o = obj
+
+	for key, val in ipairs({...}) do
+		o[key] = val
+	end
+
+	table.insert(Global.Instances, o)
 end
 
 function Fovy:newSprite(imageURL, width, height, gridRow, gridColumn, speed)
@@ -63,9 +69,19 @@ function Fovy:rgb(r, g, b)
 	return {r = r, g = g, b = b}
 end
 
-function Fovy:printTable(t)
+function Fovy:printTable(t, indent)
+	indent = indent or 0
+	
 	for k, v in pairs(t) do
-		print(k, v)
+		local prefix = string.rep("  ", indent)
+
+		if type(v) == "table" then
+			print(prefix .. k .. ": {")
+			Fovy.printTable(v, indent + 1)
+			print(prefix .. "}")
+		else
+			print(prefix .. k .. ": " .. tostring(v))
+		end
 	end
 end
 
