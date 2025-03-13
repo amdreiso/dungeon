@@ -218,6 +218,8 @@ function Player:drawAnimation()
 		self.xscale = Fovy:sign(self.hsp)
 	end
 
+	love.graphics.setColor(1, 1, 1)
+
 	self.spriteIndex.anim:draw(
 		self.spriteIndex.image,
 		self.pos.x, self.pos.y,
@@ -265,3 +267,4 @@ function Player:drawGUI()
 end
 
 return Player
+

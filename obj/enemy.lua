@@ -15,9 +15,7 @@ local Enemy = {
 function Enemy:set(id)
 	self.id = id
 
-	for key, value in ipairs(Global.EnemyList[id]) do
-		self[key] = value
-	end
+	Global.EnemyList[self.id]:load(self)
 end
 
 function Enemy:new(id)
@@ -38,7 +36,7 @@ function Enemy:update(dt)
 	self.pos.x = self.pos.x + self.hsp
 	self.pos.y = self.pos.y + self.vsp
 
-	print(self.pos.x, self.pos.y)
+	Global.EnemyList[self.id]:update(self, dt)
 end
 
 function Enemy:draw()

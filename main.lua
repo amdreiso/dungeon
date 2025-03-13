@@ -11,14 +11,17 @@ local Camera = require "obj.camera"
 local Particle = require "obj.particle"
 local Enemy = require "obj.enemy"
 
+Fovy:printTable(Global.EnemyList)
 
 local player = Player:new() 
 player.pos = Fovy:vec2(Level.size.width / 2, Level.size.height / 2)
+
 local camera = Camera:new()
 camera.pos = Fovy:vec2(Level.size.width / 2, Level.size.height / 2)
+camera:setTarget(player)
+
 local enemy = Enemy:new(0)
 enemy.pos = Fovy:vec2(100, 100)
-camera:setTarget(player)
 
 
 Fovy:instanceAdd(player)

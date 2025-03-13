@@ -7,19 +7,25 @@ function CreateEnemy(id, ...)
 	
 	for key, value in ipairs({...}) do
 		-- set attributes
-		Global.EnemyList[id][key] = value
+		Global.EnemyList[id] = value
 	end
 end
 
 -- Thief
-CreateEnemy(0, {
-	hitbox = Fovy:dim(11, 11),
+local eThief = {
+	hitbox = Fovy:dim(19, 11),
+}
 
-	update = function()
-		self.pos.x = self.pos.x + 2
-		self.pos.y = self.pos.y + 2
+function eThief:load(obj)
+	for key, value in ipairs(eThief) do
+		obj[key] = value
 	end
-})
+end
+
+function eThief:update(obj, dt)
+end
+
+CreateEnemy(0, eThief)
 
 return EnemyList
 
