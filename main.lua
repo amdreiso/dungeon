@@ -3,8 +3,16 @@ local Fovy = require "libs.fovy"
 local Global = require "global"
 
 local Player = require "obj.player"
+local Camera = require "obj.camera"
 
-Fovy:instanceAdd(Player:new())
+local player = Player:new()
+
+local camera = Camera:new()
+camera:setTarget(player)
+
+Fovy:instanceAdd(player)
+Fovy:instanceAdd(camera)
+
 
 function love.load()
 end
@@ -16,9 +24,14 @@ function love.update(dt)
 end
 
 function love.draw()
+
+	camera:set()
+
 	for _, obj in ipairs(Global.instances) do
 		obj:draw()
 	end
+
+	camera:unset()
 
 	drawDebug()
 end
