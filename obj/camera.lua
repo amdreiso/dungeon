@@ -4,10 +4,12 @@ local Global = require "global"
 
 local Camera = {
 	pos = Fovy:vec2(0, 0),
-	zoom = 1,
+	zoom = 2,
 	target = nil,
 	shakeValue = 0.00,
 	moveSpeed = 0.25,
+
+	hitbox = Fovy:dim(4, 4),
 }
 
 function Camera:new()

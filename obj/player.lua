@@ -1,3 +1,4 @@
+
 local Fovy = require("libs.fovy")
 local Global = require("global")
 
@@ -8,30 +9,23 @@ local Player = {
 	speed = 2,
 
 	hitbox = Fovy:dim(20, 20),
+	onGround = false,
 }
 
 function Player:new()
-	local player = {}
-	player.destroy = function(self)
+	Player.destroy = function(self)
 		self.isDestroyed = true
 	end
 
-	setmetatable(player, self)
+	setmetatable(Player, self)
 	self.__index = self
-	return player
+
+	return Player
 end
 
 function Player:movement(dt)
 	self.hsp = 0
-	self.vsp = 0
-
-	if love.keyboard.isDown("w") then
-		self.vsp = self.vsp - self.speed
-	end
-
-	if love.keyboard.isDown("s") then
-		self.vsp = self.vsp + self.speed
-	end
+	self.vsp = self.vsp + Global.gravity
 
 	if love.keyboard.isDown("a") then
 		self.hsp = self.hsp - self.speed
@@ -39,11 +33,6 @@ function Player:movement(dt)
 
 	if love.keyboard.isDown("d") then
 		self.hsp = self.hsp + self.speed
-	end
-
-	if self.hsp ~= 0 and self.vsp ~= 0 then
-		self.hsp = self.hsp * 0.7071
-		self.vsp = self.vsp * 0.7071
 	end
 
 	self.pos.x = self.pos.x + self.hsp
@@ -55,7 +44,7 @@ function Player:update(dt)
 end
 
 function Player:draw()
-	love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.width, self.hitbox.height)
+	--love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.width, self.hitbox.height)
 end
 
 return Player

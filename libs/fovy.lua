@@ -39,8 +39,12 @@ function Fovy:drawDebug()
 	love.graphics.print("made by amdrei", 0, 12)
 end
 
-function Fovy:instanceAdd(obj, ...)
+function Fovy:instanceAdd(obj, components) 
 	local o = obj
+
+	for key, val in pairs(components or {}) do 
+		o[key] = val
+	end
 
 	table.insert(Global.instances, o)
 end
