@@ -1,12 +1,15 @@
 
 local Fovy = require "libs.fovy"
 local Global = require "global"
+local Settings = require "settings"
 
 local Camera = {
+	name = "Camera",
 	pos = Fovy:vec2(0, 0),
 	zoom = 1,
 	target = nil,
 	shakeValue = 0.00,
+	shakePower = 1.00,
 	moveSpeed = 0.25,
 }
 
@@ -34,12 +37,19 @@ function Camera:setTarget(target)
 end
 
 function Camera:update()
+	-- Shake 
+	self.shakeValue = math.max(0, self.shakeValue - 1)
+
 	if self.target then
 		local w, h = love.graphics.getWidth() / self.zoom, love.graphics.getHeight() / self.zoom
 		local spd = self.moveSpeed
 
-		self.pos.x = Fovy:lerp(self.pos.x, (self.target.pos.x - w / 2) + math.random(-self.shakeValue, self.shakeValue), spd)
-		self.pos.y = Fovy:lerp(self.pos.y, (self.target.pos.y - h / 2) + math.random(-self.shakeValue, self.shakeValue), spd)
+		local shake = (self.shakeValue ^ self.shakePower) * Settings.graphics.cameraShakeIntensity
+		local shakeX = math.random(-shake, shake)
+		local shakeY = math.random(-shake, shake)
+
+		self.pos.x = Fovy:lerp(self.pos.x, (self.target.pos.x - w / 2) + shakeX, spd)
+		self.pos.y = Fovy:lerp(self.pos.y, (self.target.pos.y - h / 2) + shakeY, spd)
 	end
 end
 
@@ -48,8 +58,9 @@ function Camera:setPosition(x, y)
 	self.pos.y = y
 end
 
-function Camera:shake(shakeValue)
+function Camera:shake(shakeValue, shakePower)
 	self.shakeValue = shakeValue
+	self.shakePower = shakePower or 1.00
 end
 
 function Camera:draw()

@@ -10,6 +10,7 @@ Global.gameInfo = {
 
 Global.debug = true
 Global.instances = {}
+Global.cellSize = 16
 
 return Global
 

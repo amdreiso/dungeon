@@ -4,6 +4,15 @@ local Anim8 = require "libs.anim8"
 
 local Fovy = {}
 
+function Fovy:rgb(r, g, b)
+	local val = {}
+	val.r = r
+	val.g = g
+	val.b = b
+
+	return val
+end
+
 function Fovy:merge(a, b)
  	local result = {}
     for k, v in pairs(a) do result[k] = v end
@@ -39,10 +48,34 @@ function Fovy:drawDebug()
 	love.graphics.print("made by amdrei", 0, 12)
 end
 
-function Fovy:instanceAdd(obj, ...)
+function Fovy:instanceAdd(obj, components) 
 	local o = obj
 
+	for key, val in pairs(components or {}) do
+		o[key] = val
+	end
+
 	table.insert(Global.instances, o)
+end
+
+function Fovy:instanceFind(name)
+	for _, obj in ipairs(Global.instances) do
+		if name == obj.name then
+			return obj
+		end
+	end
+end
+
+function Fovy:instanceFindAll(name)
+	local i = {}
+
+	for _, obj in ipairs(Global.instances) do
+		if name == obj.name then
+			table.insert(i, obj)
+		end
+	end
+
+	return i
 end
 
 function Fovy:newSprite(imageURL, width, height, gridRow, gridColumn, speed)
@@ -68,8 +101,8 @@ function Fovy:colliding(a, b)
 	end
 end
 
-function Fovy:rgb(r, g, b)
-	return {r = r, g = g, b = b}
+function Fovy:rgba(r, g, b, a)
+	return {r = r, g = g, b = b, a = a or 1.0}
 end
 
 function Fovy:printTable(t, indent)
