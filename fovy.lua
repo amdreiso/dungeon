@@ -4,6 +4,13 @@ local Anim8 = require "libs.anim8"
 
 local Fovy = {}
 
+function Fovy:merge(a, b)
+  local result = {}
+  for k, v in pairs(a) do result[k] = v end
+  for k, v in pairs(b) do result[k] = v end
+  return result
+end
+
 function Fovy:clamp(val, min, max)
 	if val < min then
 		return min
@@ -28,14 +35,8 @@ function Fovy:drawDebug()
 	if not Global.Debug then return end
 
 	love.graphics.setColor(1, 1, 1)
-	love.graphics.print("kizza", 0, 0)
+	love.graphics.print("gamble game", 0, 0)
 	love.graphics.print("made by amdrei", 0, 12)
-end
-
-function Fovy:instanceAdd(obj, ...)
-	local o = obj
-
-	table.insert(Global.Instances, o)
 end
 
 function Fovy:newSprite(imageURL, width, height, gridRow, gridColumn, speed)
@@ -62,7 +63,7 @@ function Fovy:colliding(a, b)
 end
 
 function Fovy:rgb(r, g, b)
-	return {r = r, g = g, b = b}
+	return {red = r, green = g, blue = b}
 end
 
 function Fovy:printTable(t, indent)
@@ -95,10 +96,6 @@ end
 
 function Fovy:lerp(a, b, t)
 	return a + (b - a) * t
-end
-
-function Fovy:createInstance(obj)
-	table.insert(Global.Instances, obj)
 end
 
 return Fovy

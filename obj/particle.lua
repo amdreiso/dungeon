@@ -42,7 +42,7 @@ function Particle:draw()
 		alpha = 1 - self.age / self.lifetime
 	end
 
-	love.graphics.setColor(self.color.r, self.color.g, self.color.b, self.alpha)
+	love.graphics.setColor(self.color.red, self.color.green, self.color.blue, self.alpha)
 	love.graphics.circle("fill", self.x, self.y, self.scale)
 end
 

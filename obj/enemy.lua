@@ -2,9 +2,9 @@
 local Fovy = require "fovy"
 local Global = require "global"
 
-
 local Enemy = {
-	id = 0,
+	id = "enemy",
+	kind = 0,
 
 	pos = Fovy:vec2(0, 0),
 	hsp = 0,
@@ -12,23 +12,24 @@ local Enemy = {
 	hitbox = Fovy:dim(16, 16),
 }
 
-function Enemy:set(id)
-	self.id = id
+function Enemy:set(kind)
+	self.kind = kind
 
-	Global.EnemyList[self.id]:load(self)
+	Global.EnemyList[self.kind]:load(self)
 end
 
-function Enemy:new(id)
+function Enemy:new(components)
 	local enemy = {}
 	enemy.destroy = function(self)
 		print("Enemy destroyed")
 		self.isDestroyed = true
 	end
 
-	self:set(id)
+	enemy = Fovy:merge(enemy, components or {})
 
 	setmetatable(enemy, self)
 	self.__index = self
+
 	return enemy
 end
 
@@ -36,7 +37,7 @@ function Enemy:update(dt)
 	self.pos.x = self.pos.x + self.hsp
 	self.pos.y = self.pos.y + self.vsp
 
-	Global.EnemyList[self.id]:update(self, dt)
+	Global.EnemyList[self.kind]:update(self, dt)
 end
 
 function Enemy:draw()
@@ -52,6 +53,8 @@ end
 
 function Enemy:drawGUI()
 end
+
+Global.Instances["enemy"] = Enemy
 
 return Enemy
 

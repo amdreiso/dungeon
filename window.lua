@@ -4,7 +4,7 @@ local Global = require "global"
 
 local Window = {
 	size = Fovy:dim(1280, 720),
-	title = "kizza"
+	title = "gamble game"
 }
 
 function Window:setup()

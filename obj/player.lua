@@ -1,6 +1,5 @@
 
 local Fovy = require "fovy"
-local Object = require "object"
 local Global = require "global"
 local Level = require "level"
 local Particle = require "obj.particle"
@@ -9,6 +8,7 @@ local Anim8 = require "libs.anim8"
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 local Player = {
+	id = "player",
 	characterID = 0,
 
 	pos = Fovy:vec2(0, 0),
@@ -34,10 +34,6 @@ local Player = {
 	health = 0,
 	alive = true,
 
-	hasPizza = false,
-	pizzaIsCold = false,
-	pizzaTimer = 100,
-
 	color = Fovy:rgb(1.00, 1.00, 1.00),
 
 	sprite = {
@@ -54,12 +50,14 @@ local Player = {
 
 Player.spriteIndex = Player.sprite.idle
 
-function Player:new()
+function Player:new(components)
 	local player = {}
 	player.destroy = function(self)
 		print("Player destroyed")
 		self.isDestroyed = true
 	end
+
+	player = Fovy:merge(player, components or {})
 
 	setmetatable(player, self)
 	self.__index = self
@@ -69,27 +67,6 @@ end
 -- Sets the player's character
 function Player:setCharacter(characterID)
 	self.characterID = characterID
-end
-
--- Sets the player's pizza status
-function Player:setPizza(val)
-	self.hasPizza = val
-	self.pizzaTimer = 100
-	self.pizzaIsCold = false
-end
-
--- Everything pizza related
-function Player:pizzaLogic()
-	if not self.hasPizza then return false end
-
-	self.pizzaTimer = self.pizzaTimer - 0.05
-	if self.pizzaTimer <= 0 then
-		self.hasPizza = false
-		self.pizzaTimer = 100
-		self.pizzaIsCold = true
-
-		-- Game Over logic
-	end
 end
 
 -- Walking movement
@@ -165,7 +142,7 @@ function Player:movement()
 	self.pos.y = Fovy:clamp(self.pos.y, self.hitbox.height/2, Level.size.height - self.hitbox.height/2)
 
 	if love.keyboard.isDown("space") then
-		for i = 1, 10 do
+		for i = 1, 100 do
 			local particle = Particle:new()
 			particle.x = self.pos.x
 			particle.y = self.pos.y
@@ -175,35 +152,8 @@ function Player:movement()
 			particle.scale = math.random(1, 5)
 			particle.speed = math.random(1.00, 3.00)
 			particle.color = Fovy:rgb(math.random(0.70, 1.00), 0, 0)
-			table.insert(Global.Instances, particle)
+			table.insert(Level.instances, particle)
 		end
-	end
-end
-
--- Receives pizza from the receive point
-function Player:getPizza()
-	if not Level.receivePoint.hasPizza then
-		return false
-	end
-
-	if Fovy:colliding(self, Level.receivePoint) then
-		print("GOT PIZZA")
-		self:setPizza(true)
-		Level.receivePoint.hasPizza = false
-	end
-end
-
--- Delivers pizza to the deliver point
-function Player:deliverPizza()
-	if not self.hasPizza then
-		return false
-	end
-
-	if Fovy:colliding(self, Level.deliverPoint) then
-		print("DELIVERED PIZZA")
-
-		self:setPizza(false)
-		Level.receivePoint.hasPizza = true
 	end
 end
 
@@ -231,40 +181,21 @@ function Player:drawAnimation()
 end
 
 function Player:update(dt)
-	self:movement()
-	self:pizzaLogic()
+	self:movement()	
 
 	-- Draw
 	self.spriteIndex.anim:update(dt)
-	
-	-- PIZZA
-	self:getPizza()
-	self:deliverPizza()
 end
 
 function Player:draw()
 	self:drawAnimation()
-
-	if self.hasPizza then
-		love.graphics.setColor(0.4, 0.3, 1)
-		love.graphics.circle("fill", self.pos.x + 5, self.pos.y - 5, 5)
-	end
 end
 
 function Player:drawGUI()
-	local w, h = love.graphics.getWidth(), love.graphics.getHeight()
-	local multiplier = 3
-	local t = self.pizzaTimer / 2 * multiplier
-	local maxT = 100 / 2 * multiplier
-	
-	if self.hasPizza then
-		love.graphics.setColor(0.4, 0.3, 1)
-		love.graphics.rectangle("fill", 0, h/2 - t, 30, t + t)
-	end
-
-	love.graphics.setColor(0.4, 0.3, 1)
-	love.graphics.rectangle("line", 0, h/2 - maxT, 30, maxT + maxT)
 end
 
+Global.Instances["player"] = Player
+
 return Player
+
 
