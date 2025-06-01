@@ -9,6 +9,7 @@ local Level = {
 	instances = {},
 }
 
+
 function Level:create() 
 	local player = Global.Instances["player"]:new({
 		pos = Fovy:vec2(10, 0)
@@ -97,7 +98,8 @@ function Level:draw()
 
 	self:drawMap()
 
-	if love.mouse.isDown(1) then
+	local player = Level:instanceFind("player")
+	if love.mouse.isDown(1) and Fovy:distance2D(mx, my, player.pos.x, player.pos.y) < player.range then
 		local x = math.floor(mx / self.tileSize)
 		local y = math.floor(my / self.tileSize)
 

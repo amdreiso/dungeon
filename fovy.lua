@@ -4,6 +4,10 @@ local Anim8 = require "libs.anim8"
 
 local Fovy = {}
 
+function Fovy:pointDistance(x1, y1, x2, y2)
+	return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
+end
+
 function Fovy:merge(a, b)
   local result = {}
   for k, v in pairs(a) do result[k] = v end

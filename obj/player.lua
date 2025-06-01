@@ -22,7 +22,7 @@ local Player = {
 	dash = false,
 	dashTime = 0,
 
-	range = 10,
+	range = 32,
 
 	onCar = false,
 	car = {
@@ -50,11 +50,15 @@ local Player = {
 	xscale = 1,
 	yscale = 1,
 
+	-- Equipment
 	hands = {
 		"pumpkin",
 		0,
 	},
 	handIndex = 1,
+
+	-- Inventory system
+	inventory = {},
 }
 
 Player.spriteIndex = Player.sprite.idle
