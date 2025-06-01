@@ -29,13 +29,15 @@ function Level:create()
 	Level:instanceAdd(player)
 	Level:instanceAdd(camera)
 	Level:instanceAdd(enemy)
-	Level:instanceAdd(enclosure)
-	Level:instanceAdd(Global.Instances["enclosure"]:new({
-		pos = Fovy:vec2(256, 64),
-		dim = Fovy:dim(128, 128),
-	}))
 
 	Level:loadMap()
+end
+
+function Level:setSize(width, height)
+	self.size = Fovy:dim(
+		width * self.tileSize,
+		height * self.tileSize
+	)
 end
 
 function Level:tile(tileID)
@@ -93,12 +95,15 @@ end
 function Level:update(dt)
 end
 
-function Level:draw()
+player = nil
+
+function Level:drawCursor()
 	local mx, my = self:getMouseTile()
 
-	self:drawMap()
+	if player == nil then
+		player = self:instanceFind("player")
+	end
 
-	local player = Level:instanceFind("player")
 	if love.mouse.isDown(1) and Fovy:distance2D(mx, my, player.pos.x, player.pos.y) < player.range then
 		local x = math.floor(mx / self.tileSize)
 		local y = math.floor(my / self.tileSize)
@@ -111,6 +116,11 @@ function Level:draw()
 	else
 		love.graphics.rectangle("line", mx, my, self.tileSize, self.tileSize)
 	end
+end
+
+function Level:draw()
+	self:drawMap()
+	self:drawCursor()
 end
 
 return Level

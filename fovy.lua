@@ -4,6 +4,17 @@ local Anim8 = require "libs.anim8"
 
 local Fovy = {}
 
+function Fovy:direction(x1, y1, x2, y2)
+  return math.atan2(y2 - y1, x2 - x1)
+end
+
+function Fovy:moveTowards(x, y, direction_deg, speed)
+  local rad = math.rad(direction_deg)
+  local dx = math.cos(rad) * speed
+  local dy = math.sin(rad) * speed
+  return x + dx, y + dy
+end
+
 function Fovy:pointDistance(x1, y1, x2, y2)
 	return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
 end
@@ -39,8 +50,15 @@ function Fovy:drawDebug()
 	if not Global.Debug then return end
 
 	love.graphics.setColor(1, 1, 1)
-	love.graphics.print("gamble game", 0, 0)
-	love.graphics.print("made by amdrei", 0, 12)
+	self:text("gamble game", 0, 0, 1)
+	self:text("made by amdrei", 0, 12, 1)
+end
+
+function Fovy:text(str, x, y, offset)
+	love.graphics.setColor(0, 0, 0)
+	love.graphics.print(str, x+offset, y+offset)
+	love.graphics.setColor(1, 1, 1)
+	love.graphics.print(str, x, y)
 end
 
 function Fovy:newSprite(imageURL, width, height, gridRow, gridColumn, speed)

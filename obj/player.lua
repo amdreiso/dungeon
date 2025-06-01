@@ -2,6 +2,7 @@
 local Fovy = require "fovy"
 local Global = require "global"
 local Level = require "level"
+local Bullet = require "obj.bullet"
 local Particle = require "obj.particle"
 local Anim8 = require "libs.anim8"
 local Item = require "data.item"
@@ -52,7 +53,7 @@ local Player = {
 
 	-- Equipment
 	hands = {
-		"pumpkin",
+		1,
 		0,
 	},
 	handIndex = 1,
@@ -205,8 +206,23 @@ function Player:setHand(index, value)
 	self.hands[index] = value
 end
 
+
+-- Weapons etc
+function Player:attack()
+	-- Shooting
+	if love.mouse.isDown(1) then
+		local bullet = Bullet:new()
+		bullet.direction = math.random(360)
+		table.insert(Level.instances, bullet)
+	end
+end
+
+
+
+
 function Player:update(dt)
 	self:movement()	
+	self:attack()
 
 	-- Draw
 	self.spriteIndex.anim:update(dt)
@@ -219,7 +235,7 @@ end
 function Player:drawGUI()
 	local hand = self:getHand()
 	local item = Global.ItemList[hand]
-	love.graphics.draw(item.sprite, 100, 100, 0, 5, 5)
+	love.graphics.draw(item.sprite, 10, 50, 0, 1, 1)
 end
 
 Global.Instances["player"] = Player

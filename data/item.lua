@@ -55,7 +55,9 @@ function Item:register(name, sprite, type, components)
     item.sprite:setFilter("nearest", "nearest")
 	end
 
-	Global.ItemList[name] = item
+	local id = #Global.ItemList + 1
+	print(id)
+	Global.ItemList[id] = item
 end
 
 function Item:getType(type)
