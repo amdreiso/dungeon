@@ -4,8 +4,6 @@ require "data.enemies"
 require "lists.init"
 require "obj.init"
 
--- require init and whatever to load every data files
-
 local Fovy = require "fovy"
 local Global = require "global"
 local Level = require "level"

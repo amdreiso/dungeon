@@ -24,7 +24,6 @@ function Enclosure:new(components)
 end
 
 function Enclosure:update(dt)
-	Fovy:printTable(self.color)
 end
 
 function Enclosure:draw()

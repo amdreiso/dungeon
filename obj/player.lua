@@ -4,6 +4,7 @@ local Global = require "global"
 local Level = require "level"
 local Particle = require "obj.particle"
 local Anim8 = require "libs.anim8"
+local Item = require "data.item"
 
 love.graphics.setDefaultFilter("nearest", "nearest")
 
@@ -20,6 +21,8 @@ local Player = {
 	force = Fovy:vec2(0, 0),
 	dash = false,
 	dashTime = 0,
+
+	range = 10,
 
 	onCar = false,
 	car = {
@@ -46,6 +49,12 @@ local Player = {
 	scale = 1,
 	xscale = 1,
 	yscale = 1,
+
+	hands = {
+		"pumpkin",
+		0,
+	},
+	handIndex = 1,
 }
 
 Player.spriteIndex = Player.sprite.idle
@@ -180,6 +189,18 @@ function Player:drawAnimation()
 	)
 end
 
+function Player:getRange()
+	return self.range
+end
+
+function Player:getHand()
+	return self.hands[self.handIndex]
+end
+
+function Player:setHand(index, value)
+	self.hands[index] = value
+end
+
 function Player:update(dt)
 	self:movement()	
 
@@ -192,6 +213,9 @@ function Player:draw()
 end
 
 function Player:drawGUI()
+	local hand = self:getHand()
+	local item = Global.ItemList[hand]
+	love.graphics.draw(item.sprite, 100, 100, 0, 5, 5)
 end
 
 Global.Instances["player"] = Player
